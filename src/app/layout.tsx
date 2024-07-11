@@ -4,6 +4,7 @@ import "./globals.css";
 import Header from "@/components/header/Header";
 import Footer from "@/components/footer/Footer";
 import Sidebar from "@/components/sidebar/siderbar";
+import ReduxProvider from "@/components/ReduxProvider";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -20,15 +21,18 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <Header></Header>
-        <div className="flex">
-          {/* sidebar  */}
-          <div>{/* <Sidebar /> */}</div>
-          {/* main content  */}
-          <div>{children}</div>
-        </div>
+        <ReduxProvider>
+          <Header></Header>
+          <div className="flex">
+            {/* sidebar  */}
+            <div>{/* <Sidebar /> */}</div>
+            {/* main content  */}
 
-        <Footer />
+            <div>{children}</div>
+          </div>
+
+          <Footer />
+        </ReduxProvider>
       </body>
     </html>
   );

@@ -6,6 +6,8 @@ import ProductGrid from "./ProductGrid";
 // import ProductGrid from '../components/ProductGrid';
 // import Sidebar from '../components/Sidebar';
 import image from "../../../public/images/sergel.jpg";
+import { useProductsQuery } from "@/redux/api/productApi";
+import { useDebounced } from "@/redux/hooks";
 
 const products = [
   {
@@ -53,6 +55,34 @@ const products = [
 
 const ProductContainer = () => {
   const [sidebarVisible, setSidebarVisible] = useState(true);
+
+  const query: Record<string, any> = {};
+
+  const [page, setPage] = useState<number>(1);
+  const [size, setSize] = useState<number>(10);
+  const [sortBy, setSortBy] = useState<string>("");
+  const [sortOrder, setSortOrder] = useState<string>("");
+  const [searchTerm, setSearchTerm] = useState<string>("");
+
+  query["limit"] = size;
+  query["page"] = page;
+  query["sortBy"] = sortBy;
+  query["sortOrder"] = sortOrder;
+
+  const debouncedSearchTerm = useDebounced({
+    searchQuery: searchTerm,
+    delay: 600,
+  });
+
+  if (!!debouncedSearchTerm) {
+    query["searchTerm"] = debouncedSearchTerm;
+  }
+  const { data, isLoading } = useProductsQuery({ ...query });
+
+  const productData = data?.products;
+  const meta = data?.meta;
+
+  console.log(productData);
 
   return (
     <div className="flex">
